@@ -52,11 +52,12 @@ def report(line_num, a, b, c, n_inliers):
 
 
 if __name__ == "__main__":
-    # --- Part 1: TLS on the first 5 rows of Line 1 only ---
-    x1_sample = np.array([-4.4422, -5.3055, -5.5404, -4.9821, -4.4957])
-    y1_sample = np.array([-12.4150, -12.6663, -11.0077, -11.6973, -11.9780])
+    # --- Part 1: TLS on all Line 1 data from lines.csv ---
+    D = np.genfromtxt("lines.csv", delimiter=",", skip_header=1)
+    x1_sample = D[:, 0]
+    y1_sample = D[:, 3]
     a, b, c = fit_line_tls(x1_sample, y1_sample)
-    print("Total Least Squares — Line 1 (first 5 rows)")
+    print("Total Least Squares — Line 1 (full dataset)")
     print("=" * 50)
     print(f"  Equation : {a:+.6f}*x {b:+.6f}*y {c:+.6f} = 0")
     print(f"  a        : {a:.6f}")
