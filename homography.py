@@ -39,7 +39,7 @@ def collect_points(window_name, img):
         if cv2.waitKey(20) & 0xFF == 27:
             break
     cv2.destroyWindow(window_name)
-    return np.array(pts, dtype=np.float32)
+    return np.array(pts, dtype=np.float32), display
 
 
 # ── part (a): manual homography + warp ───────────────────────────────────────
@@ -48,8 +48,12 @@ def part_a(im1, im2):
     print("=== Part (a): Manual Homography ===")
     print("Click corresponding points in Image 1 then Image 2.")
 
-    p1 = collect_points("Image 1 — click points", im1)
-    p2 = collect_points("Image 2 — click points", im2)
+    p1, ann1 = collect_points("Image 1 — click points", im1)
+    p2, ann2 = collect_points("Image 2 — click points", im2)
+
+    cv2.imwrite("outputs/a_clicks_im1.jpg", ann1)
+    cv2.imwrite("outputs/a_clicks_im2.jpg", ann2)
+    print("Annotated click images saved to outputs/a_clicks_im1.jpg and a_clicks_im2.jpg")
 
     print(f"Points in Image 1:\n{p1}")
     print(f"Points in Image 2:\n{p2}")
@@ -205,9 +209,8 @@ if __name__ == "__main__":
     im1 = cv2.imread("images/c1.jpg")
     im2 = cv2.imread("images/c2.jpg")
 
-    # Comment out parts you don't want to re-run
-    # H_manual, warped_manual = part_a(im1, im2)
-    # diff_manual             = part_b(im2, warped_manual)
+    H_manual, warped_manual = part_a(im1, im2)
+    diff_manual             = part_b(im2, warped_manual)
 
     kp1, kp2, good    = part_c(im1, im2)
     H_auto, diff_auto = part_d(im1, im2, kp1, kp2, good)
